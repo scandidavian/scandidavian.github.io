@@ -24,9 +24,9 @@
     }
 
     function enablePushNotifications() {
-      if (typeof window.webkit.messageHandlers === object &&
-          typeof window.webkit.messageHandlers.registerForPushNotifications === object &&
-          typeof window.webkit.messageHandlers.registerForPushNotifications.postMessage === function) {
+      if (typeof window.webkit.messageHandlers != "undefined" &&
+          typeof window.webkit.messageHandlers.registerForPushNotifications != "undefined" &&
+          typeof window.webkit.messageHandlers.registerForPushNotifications.postMessage === "function") {
         var promise = window.webkit.messageHandlers.registerForPushNotifications.postMessage({"hive": "SKEP2"});
         
         promise.then(
