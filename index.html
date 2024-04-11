@@ -6,9 +6,9 @@
     <title>Simple HTML page</title>
     <script>
     
-    function changeEcho(newText){
+    function sendDeviceTokenToServer(deviceToken){
         var echoElement = document.getElementById("echo");
-        echoElement.innerText = newText; 
+        echoElement.innerText = deviceToken; 
     }
 
     function sendToNative(message){
@@ -23,17 +23,21 @@
         element.value = "";
     }
 
-    function fetchDeviceToken() {
-        
-        var promise = window.webkit.messageHandlers.native.postMessage({"message": "fetch"});
+    function enablePushNotifications() {
+      if (typeof window.webkit.messageHandlers === object &&
+          typeof window.webkit.messageHandlers.registerForPushNotifications === object &&
+          typeof window.webkit.messageHandlers.registerForPushNotifications.postMessage === function) {
+        var promise = window.webkit.messageHandlers.registerForPushNotifications.postMessage({"hive": "SKEP2"});
         
         promise.then(
           function(result) {
-            var message = result["token"]
-            changeEcho(message)
+            var deviceToken = result["success"]
+            sendDeviceTokenToServer(deviceToken)
           },
           function(err) {
-          });
+          }
+        );
+      }
     }
     </script>
   </head>
@@ -42,7 +46,7 @@
       <h2>Simple HTML Interaction</h2>
       <p>Hello this is a simple Javascript based page. Values entered in text box will be reflected</p>
       <p id="echo">Response from native goes here</p>
-      <button class="button" onclick="fetchDeviceToken()">Fetch Device Token</button>
+      <button class="button" onclick="enablePushNotifications()">Turn on Notifications</button>
       <hr/>
       <h3>Native</h3>
       <p>Value entered here will be sent back to phone</p>
