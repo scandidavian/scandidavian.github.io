@@ -8,7 +8,7 @@
     
     function sendToNative(message){
         var nativeApp = window.webkit.messageHandlers.nativeApp
-        nativeApp.postMessage(message)
+        nativeApp.postMessage({"message": message})
     }
 
     function sendMessage(){
