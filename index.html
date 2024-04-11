@@ -6,6 +6,11 @@
     <title>Simple HTML page</title>
     <script>
     
+    function changeEcho(newText){
+        var echoElement = document.getElementById("echo");
+        echoElement.innerText = newText; 
+    }
+
     function sendToNative(message){
         var nativeApp = window.webkit.messageHandlers.nativeApp
         nativeApp.postMessage({"message": message})
@@ -18,13 +23,26 @@
         element.value = "";
     }
 
+    function fetchDeviceToken() {
+        
+        var promise = window.webkit.messageHandlers.native.postMessage({"message": "fetch"});
+        
+        promise.then(
+          function(result) {
+            var message = result["token"]
+            changeEcho(message)
+          },
+          function(err) {
+          });
+    }
     </script>
   </head>
   <body>
     <div class="container">
-      <h2>Simple HTML Interaction </h2>
+      <h2>Simple HTML Interaction</h2>
       <p>Hello this is a simple Javascript based page. Values entered in text box will be reflected</p>
-      <p id="echo">Echoed here.</p>
+      <p id="echo">Response from native goes here</p>
+      <button class="button" onclick="fetchDeviceToken()">Fetch Device Token</button>
       <hr/>
       <h3>Native</h3>
       <p>Value entered here will be sent back to phone</p>
