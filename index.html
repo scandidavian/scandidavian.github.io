@@ -3,37 +3,34 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>Simple HTML page</title>
+    <title>Native App Proof of Concept</title>
     <script>
     
-    function sendDeviceTokenToServer(deviceToken){
-        var echoElement = document.getElementById("echo");
-        echoElement.innerText = deviceToken; 
+    function showDeviceToken(deviceToken){
+        var deviceTokenElement = document.getElementById("deviceToken");
+        deviceTokenElement.innerText = deviceToken; 
     }
 
-    function sendToNative(message){
-        var nativeApp = window.webkit.messageHandlers.nativeApp
-        nativeApp.postMessage({"message": message})
-    }
-
-    function sendMessage(){
-        var element = document.getElementById("ping");
-        console.log(element.value);
-        sendToNative(element.value);
-        element.value = "";
-    }
-
-    function enablePushNotifications() {
-      if (typeof window.webkit != "undefined" &&
+    function pushNotificationsSupported() {
+     if (typeof window.webkit != "undefined" &&
           typeof window.webkit.messageHandlers != "undefined" &&
           typeof window.webkit.messageHandlers.registerForPushNotifications != "undefined" &&
           typeof window.webkit.messageHandlers.registerForPushNotifications.postMessage === "function") {
-        var promise = window.webkit.messageHandlers.registerForPushNotifications.postMessage({"hive": "SKEP2"});
+        return true
+      }
+
+      return false
+    }
+
+    function enablePushNotifications() {
+      if (pushNotificationsSupported()) {
+        let message = {}  // For now, we don't need to send the native app any parameters to register for push notifications
+        var promise = window.webkit.messageHandlers.registerForPushNotifications.postMessage(message);
         
         promise.then(
           function(result) {
-            var deviceToken = result["success"]
-            sendDeviceTokenToServer(deviceToken)
+            var deviceToken = result["deviceToken"]
+            showDeviceToken(deviceToken)
           },
           function(err) {
           }
@@ -44,15 +41,10 @@
   </head>
   <body>
     <div class="container">
-      <h2>Simple HTML Interaction</h2>
-      <p>Hello this is a simple Javascript based page. Values entered in text box will be reflected</p>
-      <p id="echo">Response from native goes here</p>
+      <h2>Native App Proof of Concept</h2>
+      <p>When tapping on Turn on Notifications, the native app will register for push notifications and return a device token.</p>
+      <p id="deviceToken">Waiting for device token...</p>
       <button class="button" onclick="enablePushNotifications()">Turn on Notifications</button>
-      <hr/>
-      <h3>Native</h3>
-      <p>Value entered here will be sent back to phone</p>
-      <input id="ping" placeholder="Enter to send" class="input"/>
-      <button class="button" onclick = "sendMessage()" >Send</button>
     </div>
   </body>
 </html>
