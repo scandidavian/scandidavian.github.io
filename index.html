@@ -11,11 +11,29 @@
         deviceTokenElement.innerText = deviceToken; 
     }
 
-    function pushNotificationsSupported() {
+    function hasWebKitMessageHandlers() {
      if (typeof window.webkit != "undefined" &&
-          typeof window.webkit.messageHandlers != "undefined" &&
+          typeof window.webkit.messageHandlers != "undefined") {
+        return true
+      }
+
+      return false
+    }
+
+    function pushNotificationsSupported() {
+      if (hasWebKitMessageHandlers() &&
           typeof window.webkit.messageHandlers.registerForPushNotifications != "undefined" &&
           typeof window.webkit.messageHandlers.registerForPushNotifications.postMessage === "function") {
+        return true
+      }
+
+      return false
+    }
+
+    function isApplicationVersionAvailable() {
+      if (hasWebKitMessageHandlers() &&
+          typeof window.webkit.messageHandlers.getApplicationInfo != "undefined" &&
+          typeof window.webkit.messageHandlers.getApplicationInfo.postMessage === "function") {
         return true
       }
 
@@ -37,11 +55,30 @@
         );
       }
     }
+
+    function updateApplicationVersion() {
+      if (isApplicationVersionAvailable()) {
+        let message = {}  // For now, we don't need to send the native app any parameters
+        var promise = window.webkit.messageHandlers.getApplicationInfo.postMessage(message);
+        
+        promise.then(
+          function(result) {
+            var version = result["version"]
+            var appVersionElement = document.getElementById("appVersion")
+            appVersionElement.innerText = version
+          },
+          function(err) {
+          }
+        );
+      }
+    }
     </script>
   </head>
   <body>
     <div class="container">
       <h2>Native App Proof of Concept</h2>
+      <p id="appVersion">app version unknown</p>
+      <button class="button" onclick="updateApplicationVersion()">
       <p>When tapping on Turn on Notifications, the native app will register for push notifications and return a device token.</p>
       <p id="deviceToken">Waiting for device token...</p>
       <button class="button" onclick="enablePushNotifications()">Turn on Notifications</button>
