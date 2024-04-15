@@ -94,6 +94,20 @@
       }
     }
 
+    function stopUpdatingLocation() {
+      if (isNativeLocationDataAvailable()) {
+        let message = {}
+        var promise = window.webkit.messageHandlers.stopLocationUpdates.postMessage(message);
+        
+        promise.then(
+          function(result) {
+          },
+          function(err) {
+          }
+        );
+      }
+    }
+
     function updateApplicationVersion() {
       if (isApplicationVersionAvailable()) {
         let message = {}  // For now, we don't need to send the native app any parameters
@@ -121,10 +135,11 @@
       <p id="deviceToken">Waiting for device token...</p>
       <button class="button" onclick="enablePushNotifications()">Turn on Notifications</button>
       <p>Location</p>
-      <p id="latitude">None...</p>
+      <p id="latitude">None</p>
       <p id="longitude">None</p>
       <p id="altitude">None</p>
       <button class="button" onclick="startUpdatingLocation()">Start updating location</button>
+      <button class="button" onclick="stopUpdatingLocation()">Stop updating location</button>
     </div>
   </body>
 </html>
