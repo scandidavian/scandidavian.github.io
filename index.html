@@ -11,7 +11,7 @@
         deviceTokenElement.innerText = deviceToken; 
     }
 
-    function updateLocationViews(location) {
+    function userLocationUpdated(location) {
       var latitude = location["latitude"]
       var latitudeElement = document.getElementById("latitude")
       latitudeElement.innerText = latitude
@@ -87,8 +87,6 @@
         
         promise.then(
           function(result) {
-            var location = result["location"]
-            updateLocationViews(location)
           },
           function(err) {
           }
@@ -123,7 +121,7 @@
       <p id="deviceToken">Waiting for device token...</p>
       <button class="button" onclick="enablePushNotifications()">Turn on Notifications</button>
       <p>Location</p>
-      <p id="latitude">None</p>
+      <p id="latitude">None...</p>
       <p id="longitude">None</p>
       <p id="altitude">None</p>
       <button class="button" onclick="startUpdatingLocation()">Start updating location</button>
