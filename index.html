@@ -6,9 +6,23 @@
     <title>Native App Proof of Concept</title>
     <script>
     
-    function showDeviceToken(deviceToken){
+    function showDeviceToken(deviceToken) {
         var deviceTokenElement = document.getElementById("deviceToken");
         deviceTokenElement.innerText = deviceToken; 
+    }
+
+    function updateLocationViews(location) {
+      var latitude = location["latitude"]
+      var latitudeElement = document.getElementById("latitude")
+      latitudeElement.innerText = latitude
+
+      var longitude = location["longitude"]
+      var longitudeElement = document.getElementById("longitude")
+      longitudeElement.innerText = longitude
+
+      var altitude = location["altitude"]
+      var altitudeElement = document.getElementById("altitude")
+      altitudeElement.innerText = altitude
     }
 
     function hasWebKitMessageHandlers() {
@@ -40,6 +54,16 @@
       return false
     }
 
+    function isNativeLocationDataAvailable() {
+      if (hasWebKitMessageHandlers() &&
+          typeof window.webkit.messageHandlers.startLocationUpdates != "undefined" &&
+          typeof window.webkit.messageHandlers.startLocationUpdates.postMessage === "function") {
+        return true
+      }
+
+      return false
+    }
+
     function enablePushNotifications() {
       if (pushNotificationsSupported()) {
         let message = {}  // For now, we don't need to send the native app any parameters to register for push notifications
@@ -49,6 +73,22 @@
           function(result) {
             var deviceToken = result["deviceToken"]
             showDeviceToken(deviceToken)
+          },
+          function(err) {
+          }
+        );
+      }
+    }
+
+    function startUpdatingLocation() {
+      if (isNativeLocationDataAvailable()) {
+        let message = {}
+        var promise = window.webkit.messageHandlers.startLocationUpdates.postMessage(message);
+        
+        promise.then(
+          function(result) {
+            var location = result["location"]
+            updateLocationViews(location)
           },
           function(err) {
           }
@@ -82,6 +122,11 @@
       <p>When tapping on Turn on Notifications, the native app will register for push notifications and return a device token.</p>
       <p id="deviceToken">Waiting for device token...</p>
       <button class="button" onclick="enablePushNotifications()">Turn on Notifications</button>
+      <p>Location</p>
+      <p id="latitude">None</p>
+      <p id="longitude">None</p>
+      <p id="altitude">None</p>
+      <button class="button" onclick="startUpdatingLocation()">Start updating location</button>
     </div>
   </body>
 </html>
