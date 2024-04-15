@@ -23,6 +23,10 @@
       var altitude = location["altitude"]
       var altitudeElement = document.getElementById("altitude")
       altitudeElement.innerText = altitude
+
+      var verticalAccuracy = location["verticalAccuracy"]
+      var verticalAccuracyElement = document.getElementById("verticalAccuracy")
+      verticalAccuracyElement.innerText = altitude
     }
 
     function hasWebKitMessageHandlers() {
@@ -138,6 +142,7 @@
       <p id="latitude">None</p>
       <p id="longitude">None</p>
       <p id="altitude">None</p>
+      <p id="verticalAccuracy">None</p>
       <button class="button" onclick="startUpdatingLocation()">Start updating location</button>
       <button class="button" onclick="stopUpdatingLocation()">Stop updating location</button>
     </div>
