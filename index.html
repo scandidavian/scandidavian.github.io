@@ -128,12 +128,27 @@
         );
       }
     }
+
+    if (video.webkitSupportsPresentationMode && video.webkitSupportsPresentationMode("picture-in-picture") && typeof video.webkitSetPresentationMode === "function") {
+      // Toggle PiP when the user clicks the button.
+      pipButtonElement.addEventListener("click", function(event) {
+          video.webkitSetPresentationMode(video.webkitPresentationMode === "picture-in-picture" ? "inline" : "picture-in-picture");
+      });
+    } else {
+        pipButtonElement.disabled = true;
+    }
+
     </script>
   </head>
   <body style="background-color: white;">
     <div class="container">
       <h2>Video Playback</h2>
-      <video id="video" src="test.mp4"></video>
+      <video id="video" src="test.mp4" width="100%" height="auto"></video>
+      <div id="controls">
+        <button id="playButton">Play</button>
+        <button id="pauseButton" hidden>Pause</button>
+        <button id="PiPButton">PiP</button>
+      </div> 
       <h2>Native App Proof of Concept</h2>
       <p id="appVersion">app version unknown</p>
       <button class="button" onclick="updateApplicationVersion()">Get app info</button>
