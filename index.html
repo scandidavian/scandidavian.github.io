@@ -140,6 +140,11 @@
         pipButtonElement.disabled = true;
     }
 
+    function enterFullScreenMode() {
+      var videoElement = document.getElementById("video")
+      videoElement.webkitEnterFullScreen()
+    }
+
     </script>
   </head>
   <body style="background-color: white;">
@@ -148,7 +153,7 @@
       <video id="video" src="test.mp4" width="100%" height="auto" controls playsinline autoplay muted></video>
       <div id="controls">
         <button id="PiPButton">PiP</button>
-        <button id="FullScreen" onclick="webkitEnterFullScreen()">Full Screen</button>
+        <button id="FullScreen" onclick="enterFullScreenMode()">Full Screen</button>
       </div> 
       <h2>Native App Proof of Concept</h2>
       <p id="appVersion">app version unknown</p>
