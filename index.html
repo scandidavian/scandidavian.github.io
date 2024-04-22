@@ -129,15 +129,9 @@
       }
     }
 
-    var pipButtonElement = document.getElementById("PiPButton")
-    var videoElement = document.getElementById("video")
-    if (videoElement.webkitSupportsPresentationMode && videoElement.webkitSupportsPresentationMode("picture-in-picture") && typeof videoElement.webkitSetPresentationMode === "function") {
-      // Toggle PiP when the user clicks the button.
-      pipButtonElement.addEventListener("click", function(event) {
-          videoElement.webkitSetPresentationMode(videoElement.webkitPresentationMode === "picture-in-picture" ? "inline" : "picture-in-picture");
-      });
-    } else {
-        pipButtonElement.disabled = true;
+    function enablePictureInPictureMode() {
+      var videoElement = document.getElementById("video")
+      videoElement.webkitSetPresentationMode(videoElement.webkitPresentationMode === "picture-in-picture" ? "inline" : "picture-in-picture")
     }
 
     function enterFullScreenMode() {
@@ -152,7 +146,7 @@
       <h2>Video Playback</h2>
       <video id="video" src="test.mp4" width="100%" height="auto" controls playsinline autoplay muted></video>
       <div id="controls">
-        <button id="PiPButton">PiP</button>
+        <button id="PiPButton" onclick="enablePictureInPictureMode()">PiP</button>
         <button id="FullScreen" onclick="enterFullScreenMode()">Full Screen</button>
       </div> 
       <h2>Native App Proof of Concept</h2>
