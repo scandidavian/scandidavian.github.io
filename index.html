@@ -129,6 +129,7 @@
       }
     }
 
+    var pipButtonElement = document.getElementById("PiPButton")
     if (video.webkitSupportsPresentationMode && video.webkitSupportsPresentationMode("picture-in-picture") && typeof video.webkitSetPresentationMode === "function") {
       // Toggle PiP when the user clicks the button.
       pipButtonElement.addEventListener("click", function(event) {
@@ -145,8 +146,6 @@
       <h2>Video Playback</h2>
       <video id="video" src="test.mp4" width="100%" height="auto" playsinline autoplay></video>
       <div id="controls">
-        <button id="playButton">Play</button>
-        <button id="pauseButton" hidden>Pause</button>
         <button id="PiPButton">PiP</button>
       </div> 
       <h2>Native App Proof of Concept</h2>
