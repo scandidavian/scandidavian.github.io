@@ -130,10 +130,11 @@
     }
 
     var pipButtonElement = document.getElementById("PiPButton")
-    if (video.webkitSupportsPresentationMode && video.webkitSupportsPresentationMode("picture-in-picture") && typeof video.webkitSetPresentationMode === "function") {
+    var videoElement = document.getElementById("video")
+    if (videoElement.webkitSupportsPresentationMode && videoElement.webkitSupportsPresentationMode("picture-in-picture") && typeof videoElement.webkitSetPresentationMode === "function") {
       // Toggle PiP when the user clicks the button.
       pipButtonElement.addEventListener("click", function(event) {
-          video.webkitSetPresentationMode(video.webkitPresentationMode === "picture-in-picture" ? "inline" : "picture-in-picture");
+          videoElement.webkitSetPresentationMode(videoElement.webkitPresentationMode === "picture-in-picture" ? "inline" : "picture-in-picture");
       });
     } else {
         pipButtonElement.disabled = true;
