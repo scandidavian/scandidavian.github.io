@@ -139,6 +139,10 @@
       videoElement.webkitEnterFullScreen()
     }
 
+    function requestFullScreenMode() {
+      canvas.webkitRequestFullscreen()
+    }
+
     </script>
   </head>
   <body style="background-color: white;">
@@ -149,6 +153,10 @@
         <button id="PiPButton" onclick="enablePictureInPictureMode()">PiP</button>
         <button id="FullScreen" onclick="enterFullScreenMode()">Full Screen</button>
       </div> 
+      <h2>Full Screen Mode</h2>
+      <div>
+        <button id="WebKitFullScreen" onclick="requestFullScreenMode()">Request Full Screen</button>
+      </div>
       <h2>Native App Proof of Concept</h2>
       <p id="appVersion">app version unknown</p>
       <button class="button" onclick="updateApplicationVersion()">Get app info</button>
