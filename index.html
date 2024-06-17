@@ -58,6 +58,16 @@
       return false
     }
 
+    function isAuthorizationStatusAvailable() {
+      if (hasWebKitMessageHandlers() &&
+          typeof window.webkit.messageHandlers.getPushNotificationAuthorizationStatus != "undefined" &&
+          typeof window.webkit.messageHandlers.getPushNotificationAuthorizationStatus.postMessage === "function") {
+        return true
+      }
+
+      return false
+    }
+
     function isNativeLocationDataAvailable() {
       if (hasWebKitMessageHandlers() &&
           typeof window.webkit.messageHandlers.startLocationUpdates != "undefined" &&
@@ -143,6 +153,23 @@
       canvas.webkitRequestFullscreen()
     }
 
+    function getAuthorizationStatus() {
+      if (isAuthorizationStatusAvailable()) {
+        let message = {}  // For now, we don't need to send the native app any parameters
+        var promise = window.webkit.messageHandlers.getPushNotificationAuthorizationStatus.postMessage(message);
+        
+        promise.then(
+          function(result) {
+            var status = result["status"]
+            var authStatusElement = document.getElementById("authStatus")
+            authStatusElement.innerText = status
+          },
+          function(err) {
+          }
+        );
+      }
+    }
+
     window.addEventListener("blur", enablePictureInPictureMode)
 
     </script>
@@ -163,6 +190,8 @@
       <p id="appVersion">app version unknown</p>
       <button class="button" onclick="updateApplicationVersion()">Get app info</button>
       <p>When tapping on Turn on Notifications, the native app will register for push notifications and return a device token.</p>
+      <p id="authStatus"></p>
+      <button class="button" onclick="getAuthorizationStatus()">Get authorization status</button>
       <p id="deviceToken">Waiting for device token...</p>
       <button class="button" onclick="enablePushNotifications()">Turn on Notifications</button>
       <p>Location</p>
